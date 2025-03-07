@@ -279,6 +279,59 @@ private:
   int last_row_;
 };
 
+
+class CounterRowAddressSetter : public RowAddressSetter {
+public:
+  CounterRowAddressSetter(int double_rows, const HardwareMapping &h)
+    : row_mask_(h.addr_clk | h.addr_clr),
+      double_rows_(double_rows),
+      last_row_(-1), 
+      is_reset_(false),
+      clock_(h.addr_clk), clear_(h.addr_clr) {
+  }
+
+  virtual gpio_bits_t need_bits() const { return row_mask_; }
+
+  virtual void SetRowAddress(GPIO *io, int row) {
+    // reset the counter for the first time to ensure no random data is present
+    if (!is_reset_) {
+      resetCounter(io);
+      is_reset_ = true;
+    }
+
+    if (row == last_row_) return;
+
+    if (row > last_row_) {
+      for (int i = 0; i < row - last_row_; i++) {
+        io->SetBits(clock_);
+        io->ClearBits(clock_);
+      }
+    } else if (row < last_row_) {
+      resetCounter(io);
+      for (int i = 0; i < row; i++) {
+        io->SetBits(clock_);
+        io->ClearBits(clock_);
+      }
+    }
+
+    last_row_ = row;
+  }
+private:
+  gpio_bits_t row_mask_;
+  const gpio_bits_t clock_;
+  const gpio_bits_t clear_;
+  int last_row_;
+  bool is_reset_;
+  int double_rows_;
+
+  void resetCounter(GPIO *io) {
+    io->ClearBits(clear_);
+    io->SetBits(clock_);
+    io->ClearBits(clock_);
+    io->SetBits(clear_);
+  }
+};
+
 }
 
 const struct HardwareMapping *Framebuffer::hardware_mapping_ = NULL;
@@ -439,6 +492,9 @@ Framebuffer::~Framebuffer() {
     break;
   case 4:
     row_setter_ = new SM5266RowAddressSetter(double_rows, h);
+    break;
+  case 5:
+    row_setter_ = new CounterRowAddressSetter(double_rows, h);
     break;
   default:
     assert(0);  // unexpected type.

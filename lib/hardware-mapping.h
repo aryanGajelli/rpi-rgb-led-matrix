@@ -32,6 +32,8 @@ struct HardwareMapping {
 
   gpio_bits_t a, b, c, d, e;
 
+  gpio_bits_t addr_clk, addr_clr; // for custom counter
+
   gpio_bits_t p0_r1, p0_g1, p0_b1;
   gpio_bits_t p0_r2, p0_g2, p0_b2;
 
@@ -49,6 +51,7 @@ struct HardwareMapping {
 
   gpio_bits_t p5_r1, p5_g1, p5_b1;
   gpio_bits_t p5_r2, p5_g2, p5_b2;
+
 };
 
 extern struct HardwareMapping matrix_hardware_mappings[];
