@@ -218,6 +218,7 @@ struct HardwareMapping matrix_hardware_mappings[] = {
    */
   {
     .name = "counter",
+    
     .output_enable = GPIO_BIT(18),
     .clock = GPIO_BIT(4),
     .strobe = GPIO_BIT(17),

@@ -284,11 +284,13 @@ class CounterRowAddressSetter : public RowAddressSetter {
 public:
   CounterRowAddressSetter(int double_rows, const HardwareMapping &h)
     : row_mask_(h.addr_clk | h.addr_clr),
-      double_rows_(double_rows),
+      clock_(h.addr_clk),
+      clear_(h.addr_clr),
       last_row_(-1), 
       is_reset_(false),
-      clock_(h.addr_clk), clear_(h.addr_clr) {
-  }
+      double_rows_(double_rows) {
+        
+      }
 
   virtual gpio_bits_t need_bits() const { return row_mask_; }
 
