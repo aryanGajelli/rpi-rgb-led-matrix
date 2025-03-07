@@ -218,10 +218,10 @@ struct HardwareMapping matrix_hardware_mappings[] = {
    */
   {
     .name = "counter",
-    
+
     .output_enable = GPIO_BIT(18),
     .clock = GPIO_BIT(4),
-    .strobe = GPIO_BIT(17),
+    .strobe = GPIO_BIT(21),
 
     .addr_clk = GPIO_BIT(3),
     .addr_clr = GPIO_BIT(2), // TODO: we likely need to share this with another pin, figure out which one
@@ -233,26 +233,26 @@ struct HardwareMapping matrix_hardware_mappings[] = {
     .p0_g2 = GPIO_BIT(15),
     .p0_b2 = GPIO_BIT(23),
 
-    .p1_r1 = GPIO_BIT(10),
-    .p1_g1 = GPIO_BIT(9),
-    .p1_b1 = GPIO_BIT(11),
-    .p1_r2 = GPIO_BIT(24),
-    .p1_g2 = GPIO_BIT(25),
-    .p1_b2 = GPIO_BIT(8),
+    // .p1_r1 = GPIO_BIT(10),
+    // .p1_g1 = GPIO_BIT(9),
+    // .p1_b1 = GPIO_BIT(11),
+    // .p1_r2 = GPIO_BIT(24),
+    // .p1_g2 = GPIO_BIT(25),
+    // .p1_b2 = GPIO_BIT(8),
 
-    .p2_r1 = GPIO_BIT(0),
-    .p2_g1 = GPIO_BIT(5),
-    .p2_b1 = GPIO_BIT(6),
-    .p2_r2 = GPIO_BIT(7),
-    .p2_g2 = GPIO_BIT(1),
-    .p2_b2 = GPIO_BIT(12),
+    // .p2_r1 = GPIO_BIT(0),
+    // .p2_g1 = GPIO_BIT(5),
+    // .p2_b1 = GPIO_BIT(6),
+    // .p2_r2 = GPIO_BIT(7),
+    // .p2_g2 = GPIO_BIT(1),
+    // .p2_b2 = GPIO_BIT(12),
 
-    .p3_r1 = GPIO_BIT(13),
-    .p3_g1 = GPIO_BIT(19),
-    .p3_b1 = GPIO_BIT(26),
-    .p3_r1 = GPIO_BIT(16),
-    .p3_g1 = GPIO_BIT(20),
-    .p3_b1 = GPIO_BIT(21)
+    // .p3_r1 = GPIO_BIT(13),
+    // .p3_g1 = GPIO_BIT(19),
+    // .p3_b1 = GPIO_BIT(26),
+    // .p3_r1 = GPIO_BIT(16),
+    // .p3_g1 = GPIO_BIT(20),
+    // .p3_b1 = GPIO_BIT(21)
   },
 
 #ifdef ENABLE_WIDE_GPIO_COMPUTE_MODULE
