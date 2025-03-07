@@ -419,7 +419,7 @@ bool RGBMatrix::Options::Validate(std::string *err_in) const {
     success = false;
   }
 
-  if (row_address_type < 0 || row_address_type > 4) {
+  if (row_address_type < 0 || row_address_type > 6) {
     err->append("Row address type values can be 0 (default), 1 (AB addressing), 2 (direct row select), 3 (ABC address), 4 (ABC Shift + DE direct).\n");
     success = false;
   }
@@ -457,8 +457,8 @@ bool RGBMatrix::Options::Validate(std::string *err_in) const {
     success = false;
   }
 
-  if (pwm_lsb_nanoseconds < 50 || pwm_lsb_nanoseconds > 3000) {
-    err->append("Invalid range of pwm-lsb-nanoseconds (50..3000 allowed).\n");
+  if (pwm_lsb_nanoseconds < 0 || pwm_lsb_nanoseconds > 3000) {
+    err->append("Invalid range of pwm-lsb-nanoseconds (0..3000 allowed).\n");
     success = false;
   }
 
