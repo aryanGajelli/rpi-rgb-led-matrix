@@ -305,14 +305,14 @@ public:
 
     if (row > last_row_) {
       for (int i = 0; i < row - last_row_; i++) {
-        io->WriteSetBits(clock_);
+        io->SetBits(clock_);
         io->ClearBits(clock_);
       }
-    } else if (row % 32 < last_row_) {
+    } else if (row < last_row_) {
       resetCounter(io);
       for (int i = 0; i < row; i++) {
-        io->WriteSetBits(clock_);
-        io->WriteClrBits(clock_);
+        io->SetBits(clock_);
+        io->ClearBits(clock_);
       }
     }
 
@@ -327,10 +327,10 @@ private:
   int double_rows_;
 
   void resetCounter(GPIO *io) {
-    io->WriteClrBits(clear_);
-    io->WriteSetBits(clock_);
-    io->WriteClrBits(clock_);
-    io->WriteSetBits(clear_);
+    io->ClearBits(clear_);
+    io->SetBits(clock_);
+    io->ClearBits(clock_);
+    io->SetBits(clear_);
   }
 };
 
