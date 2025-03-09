@@ -416,6 +416,10 @@ bool GPIO::Init(int slowdown) {
   gpio_clr_bits_low_ = s_GPIO_registers + (0x28 / sizeof(uint32_t));
   gpio_read_bits_low_ = s_GPIO_registers + (0x34 / sizeof(uint32_t));
 
+  // custom extra gpios, offsets taken from https://datasheets.raspberrypi.com/bcm2711/bcm2711-peripherals.pdf
+  gpio_set1_bits_low_ = s_GPIO_registers + (0x20 / sizeof(uint32_t));
+  gpio_clr1_bits_low_ = s_GPIO_registers + (0x2C / sizeof(uint32_t));
+
 #ifdef ENABLE_WIDE_GPIO_COMPUTE_MODULE
   gpio_set_bits_high_ = s_GPIO_registers + (0x20 / sizeof(uint32_t));
   gpio_clr_bits_high_ = s_GPIO_registers + (0x2C / sizeof(uint32_t));

@@ -63,6 +63,18 @@ public:
     delay();
   }
 
+  inline void Set1Bits(gpio_bits_t value) {
+    if (!value) return;
+    *gpio_set1_bits_low_ = static_cast<uint32_t>(value & 0xFFFFFFFF);
+    delay();
+  }
+
+  inline void Clear1Bits(gpio_bits_t value) {
+    if (!value) return;
+    *gpio_clr1_bits_low_ = static_cast<uint32_t>(value & 0xFFFFFFFF);
+    delay();
+  }
+
   // Write all the bits of "value" mentioned in "mask". Leave the rest untouched.
   inline void WriteMaskedBits(gpio_bits_t value, gpio_bits_t mask) {
     // Writing a word is two operations. The IO is actually pretty slow, so
@@ -98,7 +110,6 @@ private:
 #endif
             );
   }
-
   inline void WriteSetBits(gpio_bits_t value) {
     *gpio_set_bits_low_ = static_cast<uint32_t>(value & 0xFFFFFFFF);
 #ifdef ENABLE_WIDE_GPIO_COMPUTE_MODULE
@@ -122,7 +133,9 @@ private:
   int slowdown_;
 
   volatile uint32_t *gpio_set_bits_low_;
+  volatile uint32_t *gpio_set1_bits_low_;
   volatile uint32_t *gpio_clr_bits_low_;
+  volatile uint32_t *gpio_clr1_bits_low_;
   volatile uint32_t *gpio_read_bits_low_;
 
 #ifdef ENABLE_WIDE_GPIO_COMPUTE_MODULE

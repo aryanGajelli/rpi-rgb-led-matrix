@@ -327,10 +327,10 @@ private:
   int double_rows_;
 
   void resetCounter(GPIO *io) {
-    io->ClearBits(clear_);
+    io->Clear1Bits(clear_);
     io->SetBits(clock_);
     io->ClearBits(clock_);
-    io->SetBits(clear_);
+    io->Set1Bits(clear_);
   }
 };
 
