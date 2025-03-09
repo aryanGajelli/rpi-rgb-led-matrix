@@ -224,7 +224,7 @@ struct HardwareMapping matrix_hardware_mappings[] = {
     .strobe = GPIO_BIT(21),
 
     .addr_clk = GPIO_BIT(3),
-    .addr_clr = GPIO_BIT(17), // TODO: we likely need to share this with another pin, figure out which one
+    .addr_clr = GPIO_BIT(2), // TODO: we likely need to share this with another pin, figure out which one
 
     .p0_r1 = GPIO_BIT(17),
     .p0_g1 = GPIO_BIT(27),
