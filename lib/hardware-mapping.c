@@ -221,10 +221,10 @@ struct HardwareMapping matrix_hardware_mappings[] = {
 
     .output_enable = GPIO_BIT(18),
     .clock = GPIO_BIT(4),
-    .strobe = GPIO_BIT(21),
+    .strobe = GPIO_BIT(2),
 
     .addr_clk = GPIO_BIT(3),
-    .addr_clr = GPIO_BIT(2), // TODO: we likely need to share this with another pin, figure out which one
+    .addr_clr = GPIO_BIT(45), // TODO: we likely need to share this with another pin, figure out which one
 
     .p0_r1 = GPIO_BIT(17),
     .p0_g1 = GPIO_BIT(27),
@@ -247,12 +247,12 @@ struct HardwareMapping matrix_hardware_mappings[] = {
     .p2_g2 = GPIO_BIT(1),
     .p2_b2 = GPIO_BIT(12),
 
-    // .p3_r1 = GPIO_BIT(13),
-    // .p3_g1 = GPIO_BIT(19),
-    // .p3_b1 = GPIO_BIT(26),
-    // .p3_r1 = GPIO_BIT(16),
-    // .p3_g1 = GPIO_BIT(20),
-    // .p3_b1 = GPIO_BIT(21)
+    .p3_r1 = GPIO_BIT(13),
+    .p3_g1 = GPIO_BIT(19),
+    .p3_b1 = GPIO_BIT(26),
+    .p3_r1 = GPIO_BIT(16),
+    .p3_g1 = GPIO_BIT(20),
+    .p3_b1 = GPIO_BIT(21),
   },
 
 #ifdef ENABLE_WIDE_GPIO_COMPUTE_MODULE
