@@ -86,7 +86,8 @@ private:
     }
 #endif
     for (int n = 0; n < slowdown_; n++) {
-      *gpio_clr_bits_low_ = 0;
+      // *gpio_clr_bits_low_ = 0;
+      __asm volatile("nop\n");
     }
   }
 
