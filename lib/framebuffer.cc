@@ -283,7 +283,7 @@ private:
 class CounterRowAddressSetter : public RowAddressSetter {
 public:
   CounterRowAddressSetter(int double_rows, const HardwareMapping &h)
-    : row_mask_(h.addr_clk | h.addr_clr),
+    : row_mask_(h.addr_clk),
       clock_(h.addr_clk),
       clear_(h.addr_clr),
       last_row_(-1), 
