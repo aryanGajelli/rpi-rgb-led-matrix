@@ -142,7 +142,7 @@ HARDWARE_DESC?=regular
 # So only switch this on if you really use the compute module and use more
 # than 3 parallel chains.
 # (this is untested right now, waiting for hardware to arrive for testing)
-#DEFINES+=-DENABLE_WIDE_GPIO_COMPUTE_MODULE
+DEFINES+=-DENABLE_WIDE_GPIO_COMPUTE_MODULE
 
 # ---- Pinout options for hardware variants; usually no change needed here ----
 

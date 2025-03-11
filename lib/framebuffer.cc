@@ -459,7 +459,7 @@ Framebuffer::~Framebuffer() {
   // Tell GPIO about all bits we intend to use.
   gpio_bits_t all_used_bits = 0;
 
-  all_used_bits |= h.output_enable | h.clock | h.strobe;
+  all_used_bits |= h.output_enable | h.clock | h.strobe | h.addr_clk | h.addr_clr;
 
   all_used_bits |= h.p0_r1 | h.p0_g1 | h.p0_b1 | h.p0_r2 | h.p0_g2 | h.p0_b2;
   if (parallel >= 2) {
