@@ -283,7 +283,7 @@ private:
 class CounterRowAddressSetter : public RowAddressSetter {
 public:
   CounterRowAddressSetter(int double_rows, const HardwareMapping &h)
-    : row_mask_(h.addr_clk),
+    : row_mask_(h.addr_clk | h.addr_clr),
       clock_(h.addr_clk),
       clear_(h.addr_clr),
       last_row_(-1), 
@@ -327,10 +327,10 @@ private:
   int double_rows_;
 
   void resetCounter(GPIO *io) {
-    io->Clear1Bits(clear_);
+    io->ClearBits(clear_);
     io->SetBits(clock_);
     io->ClearBits(clock_);
-    io->Set1Bits(clear_);
+    io->SetBits(clear_);
   }
 };
 
