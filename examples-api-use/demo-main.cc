@@ -1026,6 +1026,64 @@ private:
   citizen* parents_;
 };
 
+// Displays a 3D static cube
+class StaticCube : public DemoRunner {
+public:
+  StaticCube(Canvas *m) : DemoRunner(m) {}
+
+  uint8_t scale_col(int val, int lo, int hi) {
+    if (val < lo) return 0;
+    if (val > hi) return 255;
+    return 255 * (val - lo) / (hi - lo);
+  }
+
+  void Run() override {
+    const int canvas_width = canvas()->width();
+    const int canvas_height = canvas()->height();
+    const int delay_us = 15000; // Microseconds per slice
+    const int cube_dim = 50;
+    int slice = 0;
+    const int num_slices = 100;
+    const float slice_to_rad = 2 * 3.14159265 / num_slices;
+
+    // Angles that align with a square's diagonals
+    const float diag1 = 0.7854; // 45 degrees
+    const float diag2 = diag1 * 3;
+    const float diag3 = diag1 * 5;
+    const float diag4 = diag1 * 7;
+
+    while (!interrupt_received) {
+      // Wait until panel has rotated to next slice
+      usleep(delay_us);
+
+      slice++;
+      slice %= num_slices;
+
+      int angle = slice * slice_to_rad;
+      int height = cube_dim;
+      int width = 0;
+
+      // Calculate width of cube cross-section
+      // Adjust formula when crossing the cubes's diagonals
+      if ((diag1 < angle && angle < diag2) || (diag3 < angle && angle < diag4)) {
+        width = abs(cube_dim / sinf(angle));
+      }
+      else {
+        width = abs(cube_dim / cosf(angle));
+      }
+
+      // Display red cube cross-section
+      int offset_x = (canvas_width - width)/2;
+      int offset_y = (canvas_height - height)/2;
+      for(int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+          canvas()->SetPixel(x + offset_x, y + offset_y, 255, 0, 0);
+        }
+      }
+    }
+  }
+};
+
 static int usage(const char *progname) {
   fprintf(stderr, "usage: %s <options> -D <demo-nr> [optional parameter]\n",
           progname);
@@ -1165,6 +1223,10 @@ int main(int argc, char *argv[]) {
 
   case 11:
     demo_runner = new BrightnessPulseGenerator(matrix);
+    break;
+
+  case 12:
+    demo_runner = new StaticCube(matrix);
     break;
   }
 
