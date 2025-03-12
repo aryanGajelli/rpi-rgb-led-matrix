@@ -250,9 +250,9 @@ struct HardwareMapping matrix_hardware_mappings[] = {
     .p3_r1 = GPIO_BIT(13),
     .p3_g1 = GPIO_BIT(19),
     .p3_b1 = GPIO_BIT(26),
-    .p3_r1 = GPIO_BIT(16),
-    .p3_g1 = GPIO_BIT(20),
-    .p3_b1 = GPIO_BIT(21),
+    .p3_r2 = GPIO_BIT(16),
+    .p3_g2 = GPIO_BIT(20),
+    .p3_b2 = GPIO_BIT(21),
   },
 
 #ifdef ENABLE_WIDE_GPIO_COMPUTE_MODULE
