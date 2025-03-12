@@ -171,10 +171,10 @@ HARDWARE_DESC?=regular
 DEFINES+=$(USER_DEFINES)
 
 DEFINES+=-DDEFAULT_HARDWARE='"$(HARDWARE_DESC)"'
+DEFINES+=-DENABLE_WIDE_GPIO_COMPUTE_MODULE
 INCDIR=../include
 CFLAGS=-W -Wall -Wextra -Wno-unused-parameter -O3 -g -fPIC $(DEFINES) -march=native
 CXXFLAGS=$(CFLAGS) -fno-exceptions -std=c++11 -g
-
 all : $(TARGET).a $(TARGET).so.1
 
 $(TARGET).a : $(OBJECTS)
