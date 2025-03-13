@@ -38,6 +38,8 @@ public:
   // (e.g. due to a permission problem).
   bool Init(int slowdown);
 
+  volatile uint32_t* GetReg();
+
   // Initialize outputs.
   // Returns the bits that were available and could be set for output.
   // (never use the optional adafruit_hack_needed parameter, it is used
@@ -107,6 +109,10 @@ private:
     }
   }
 
+  inline gpio_bits_t ReadRegistersHigh() const {
+    return static_cast<gpio_bits_t>(*gpio_read_bits_high_);
+  }
+
   inline gpio_bits_t ReadRegisters() const {
     return (static_cast<gpio_bits_t>(*gpio_read_bits_low_)
 #ifdef ENABLE_WIDE_GPIO_COMPUTE_MODULE
@@ -141,6 +147,8 @@ private:
   volatile uint32_t *gpio_clr_bits_low_;
   volatile uint32_t *gpio_clr1_bits_low_;
   volatile uint32_t *gpio_read_bits_low_;
+  
+  volatile uint32_t *gpio_read_bits_high_;
 
 #ifdef ENABLE_WIDE_GPIO_COMPUTE_MODULE
   bool uses_64_bit_;
