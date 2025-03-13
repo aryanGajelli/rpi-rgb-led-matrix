@@ -420,7 +420,7 @@ bool GPIO::Init(int slowdown) {
   gpio_set1_bits_low_ = s_GPIO_registers + (0x20 / sizeof(uint32_t));
   gpio_clr1_bits_low_ = s_GPIO_registers + (0x2C / sizeof(uint32_t));
 
-  gpio_read_bits_high_ = s_GPIO_registers + (0x38 / sizeof(uint32_t));
+  gpio_read_bits_high_2_ = s_GPIO_registers + (0x38 / sizeof(uint32_t));
 
   // Hardcode pin 44 pull-disable
   volatile uint32_t *pull_cntrl = s_GPIO_registers + (0xec / sizeof(uint32_t));
@@ -438,7 +438,7 @@ bool GPIO::Init(int slowdown) {
 }
 
 volatile uint32_t* GPIO::GetReg() {
-  return gpio_read_bits_high_;
+  return gpio_read_bits_high_2_;
 }
 
 bool GPIO::IsPi4() {

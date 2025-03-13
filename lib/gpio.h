@@ -148,7 +148,7 @@ private:
   volatile uint32_t *gpio_clr1_bits_low_;
   volatile uint32_t *gpio_read_bits_low_;
   
-  volatile uint32_t *gpio_read_bits_high_;
+  volatile uint32_t *gpio_read_bits_high_2_;
 
 #ifdef ENABLE_WIDE_GPIO_COMPUTE_MODULE
   bool uses_64_bit_;
