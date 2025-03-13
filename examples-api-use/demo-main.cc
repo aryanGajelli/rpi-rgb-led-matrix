@@ -1085,9 +1085,27 @@ public:
         width = abs(cube_dim / cosf(angle));
       }
 
-      // Display red cube cross-section
-      int offset_x = (canvas_width - width)/2;
-      int offset_y = (canvas_height - height)/2;
+      // // Display red cube cross-section
+      // int offset_x = (canvas_width - width)/2;
+      // int offset_y = (canvas_height - height)/2;
+      // for(int x = 0; x < width; x++) {
+      //   for (int y = 0; y < height; y++) {
+      //     canvas()->SetPixel(x + offset_x, y + offset_y, 255, 0, 0);
+      //   }
+      // }
+      width = 64;
+      height = 64;
+      int offset_x = 64;
+      int offset_y = 0;
+      for(int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+          canvas()->SetPixel(x + offset_x, y + offset_y, 255, 0, 0);
+        }
+      }
+      width = 64;
+      height = 64;
+      offset_x = 0;
+      offset_y = 192;
       for(int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
           canvas()->SetPixel(x + offset_x, y + offset_y, 255, 0, 0);
