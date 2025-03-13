@@ -30,6 +30,8 @@ using std::max;
 
 using namespace rgb_matrix;
 
+static volatile uint32_t *gpio_reg;
+
 volatile bool interrupt_received = false;
 static void InterruptHandler(int signo) {
   interrupt_received = true;
@@ -1058,7 +1060,12 @@ public:
 
       slice++;
       slice %= num_slices;
-
+      
+      bool read_sync = static_cast<uint32_t>(*gpio_reg) & (1UL << (27));
+      if (read_sync) {
+        slice = 0;
+      }
+      
       int angle = slice * slice_to_rad;
       int height = cube_dim;
       int width = 0;
@@ -1157,7 +1164,7 @@ int main(int argc, char *argv[]) {
     return usage(argv[0]);
   }
 
-  RGBMatrix *matrix = RGBMatrix::CreateFromOptions(matrix_options, runtime_opt);
+  RGBMatrix *matrix = RGBMatrix::CreateFromOptionsExt(matrix_options, runtime_opt, &gpio_reg);
   if (matrix == NULL)
     return 1;
 
