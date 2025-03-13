@@ -1042,11 +1042,15 @@ public:
   void Run() override {
     const int canvas_width = canvas()->width();
     const int canvas_height = canvas()->height();
-    const int delay_us = 15000; // Microseconds per slice
+    const float rpm = 800;
+    const float us_per_rev = 1e6 * 60 / rpm;
+    
     const int cube_dim = 50;
     int slice = 0;
     const int num_slices = 100;
     const float slice_to_rad = 2 * 3.14159265 / num_slices;
+
+    const uint32_t us_per_slice = us_per_rev / num_slices; // Microseconds per slice
 
     // Angles that align with a square's diagonals
     const float diag1 = 0.7854; // 45 degrees
@@ -1056,7 +1060,7 @@ public:
 
     while (!interrupt_received) {
       // Wait until panel has rotated to next slice
-      usleep(delay_us);
+      usleep(us_per_slice);
 
       slice++;
       slice %= num_slices;
