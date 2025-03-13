@@ -166,6 +166,9 @@ public:
   // Returns NULL, if there was a problem (a message then is written to stderr).
   static RGBMatrix *CreateFromOptions(const Options &options,
                                       const RuntimeOptions &runtime_options);
+                                      
+  static RGBMatrix *CreateFromOptionsExt(const Options &options,
+    const RuntimeOptions &runtime_options, volatile uint32_t **gpio_reg);
 
   // A factory that parses your main() commandline flags to read options
   // meant to configure the the matrix and returns a freshly allocated matrix.

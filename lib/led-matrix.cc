@@ -695,6 +695,55 @@ RGBMatrix *RGBMatrix::CreateFromOptions(const RGBMatrix::Options &options,
   return new RGBMatrix(result);
 }
 
+
+RGBMatrix *RGBMatrix::CreateFromOptionsExt(const RGBMatrix::Options &options,
+  const RuntimeOptions &runtime_options, volatile uint32_t **gpio_reg) {
+std::string error;
+if (!options.Validate(&error)) {
+fprintf(stderr, "%s\n", error.c_str());
+return NULL;
+}
+
+// For the Pi4, we might need 2, maybe up to 4. Let's open up to 5.
+// on supproted architectures, -1 will emit memory barier (DSB ST) after GPIO write
+if (runtime_options.gpio_slowdown < (LED_MATRIX_ALLOW_BARRIER_DELAY ? -1 : 0)
+|| runtime_options.gpio_slowdown > 5) {
+fprintf(stderr, "--led-slowdown-gpio=%d is outside usable range\n",
+runtime_options.gpio_slowdown);
+return NULL;
+}
+
+static GPIO io;  // This static var is a little bit icky.
+if (runtime_options.do_gpio_init
+&& !io.Init(runtime_options.gpio_slowdown)) {
+fprintf(stderr, "Must run as root to be able to access /dev/mem\n"
+"Prepend 'sudo' to the command\n");
+return NULL;
+}
+*gpio_reg = io.GetReg();
+
+if (runtime_options.daemon > 0 && daemon(1, 0) != 0) {
+perror("Failed to become daemon");
+}
+
+RGBMatrix::Impl *result = new RGBMatrix::Impl(NULL, options);
+// Allowing daemon also means we are allowed to start the thread now.
+const bool allow_daemon = !(runtime_options.daemon < 0);
+if (runtime_options.do_gpio_init)
+result->SetGPIO(&io, allow_daemon);
+
+// TODO(hzeller): if we disallow daemon, then we might also disallow
+// drop privileges: we can't drop privileges until we have created the
+// realtime thread that usually requires root to be established.
+// Double check and document.
+if (runtime_options.drop_privileges > 0) {
+drop_privs(runtime_options.drop_priv_user,
+runtime_options.drop_priv_group);
+}
+
+return new RGBMatrix(result);
+}
+
 // Public interface.
 RGBMatrix *RGBMatrix::CreateFromFlags(int *argc, char ***argv,
                                       RGBMatrix::Options *m_opt_in,
