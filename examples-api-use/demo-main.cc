@@ -1065,6 +1065,7 @@ public:
       bool read_sync = static_cast<uint32_t>(*gpio_reg) & (1UL << (44-32));
       if (read_sync) {
         slice = 0;
+        printf("--SYNC--");
       }
       
       int angle = slice * slice_to_rad;
