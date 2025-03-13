@@ -1028,10 +1028,14 @@ private:
   citizen* parents_;
 };
 
+
+#define GPIO_BIT(g) ((uint64_t)1UL << (g))
 // Displays a 3D static cube
 class StaticCube : public DemoRunner {
 public:
-  StaticCube(Canvas *m) : DemoRunner(m) {}
+  StaticCube(Canvas *m, RGBMatrix *rgb_matrix) : DemoRunner(m), rgb_matrix_(rgb_matrix) {
+    rgb_matrix_->RequestInputs(GPIO_BIT(44));
+  }
 
   uint8_t scale_col(int val, int lo, int hi) {
     if (val < lo) return 0;
@@ -1060,10 +1064,12 @@ public:
 
     while (!interrupt_received) {
       // Wait until panel has rotated to next slice
-      usleep(us_per_slice);
+      // usleep(us_per_slice);
 
-      bool read_sync = static_cast<uint32_t>(*gpio_reg) & (1UL << (44-32));
+      //bool read_sync = static_cast<uint32_t>(*gpio_reg) & (1UL << (44-32));
+      uint32_t read_sync = rgb_matrix_->AwaitInputChange(0);
       if (read_sync) {
+        printf("Sync\n");
         slice = 0;
       }
       
@@ -1093,6 +1099,8 @@ public:
       slice %= num_slices;
     }
   }
+  private:
+    RGBMatrix *rgb_matrix_;
 };
 
 static int usage(const char *progname) {
@@ -1237,7 +1245,7 @@ int main(int argc, char *argv[]) {
     break;
 
   case 12:
-    demo_runner = new StaticCube(matrix);
+    demo_runner = new StaticCube(canvas, matrix);
     break;
   }
 
