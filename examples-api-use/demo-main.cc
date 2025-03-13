@@ -1058,16 +1058,19 @@ public:
     const float diag3 = diag1 * 5;
     const float diag4 = diag1 * 7;
 
+    bool prev_sync = false;
+
     while (!interrupt_received) {
       // Wait until panel has rotated to next slice
       usleep(us_per_slice);
       canvas()->Clear();
 
       bool read_sync = static_cast<uint32_t>(*gpio_reg) & (1UL << (44-32));
-      if (read_sync) {
+      if (!prev_sync && read_sync) {
         slice = 0;
         printf("--SYNC--");
       }
+      prev_sync = read_sync;
       
       int angle = slice * slice_to_rad;
       int height = cube_dim;
