@@ -1061,6 +1061,7 @@ public:
     while (!interrupt_received) {
       // Wait until panel has rotated to next slice
       usleep(us_per_slice);
+      canvas()->Clear();
 
       bool read_sync = static_cast<uint32_t>(*gpio_reg) & (1UL << (44-32));
       if (read_sync) {
