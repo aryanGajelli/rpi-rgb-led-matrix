@@ -1062,10 +1062,7 @@ public:
       // Wait until panel has rotated to next slice
       usleep(us_per_slice);
 
-      slice++;
-      slice %= num_slices;
-      
-      bool read_sync = static_cast<uint32_t>(*gpio_reg) & (1UL << (27));
+      bool read_sync = static_cast<uint32_t>(*gpio_reg) & (1UL << (44-32));
       if (read_sync) {
         slice = 0;
       }
@@ -1091,6 +1088,9 @@ public:
           canvas()->SetPixel(x + offset_x, y + offset_y, 255, 0, 0);
         }
       }
+
+      slice++;
+      slice %= num_slices;
     }
   }
 };
