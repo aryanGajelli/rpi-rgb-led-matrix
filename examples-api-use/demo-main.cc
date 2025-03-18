@@ -1107,10 +1107,10 @@ public:
       int offset_y = (rows_per_panel - height) / 2;
       for(int x = 0; x < width/2; x++) {
         for (int y = 0; y < height; y++) {
-          if (offset_x <= x && x < width/2 + offset_x && offset_y <= y && y < height + offset_y)
-            canvas()->SetPixel(x, y, 255, 255, 255);
-          else
-            canvas()->SetPixel(x, y, 0,0,0);
+          // if (offset_x <= x && x < width/2 + offset_x && offset_y <= y && y < height + offset_y)
+            canvas()->SetPixel(x + offset_x, y + offset_y, 255, 255, 255);
+          // else
+          //   canvas()->SetPixel(x, y, 0,0,0);
         }
       }
 
@@ -1118,10 +1118,10 @@ public:
       offset_y = rows_per_panel * 2 + (rows_per_panel - height) / 2;
       for(int x = 0; x < width/2; x++) {
         for (int y = 0; y < height; y++) {
-          if (offset_x <= x && x < width/2 + offset_x && offset_y <= y && y < height + offset_y)
-            canvas()->SetPixel(x, y, 255, 255, 255);
-          else
-            canvas()->SetPixel(x, y, 0,0,0);
+          // if (offset_x <= x && x < width/2 + offset_x && offset_y <= y && y < height + offset_y)
+            canvas()->SetPixel(x + offset_x, y + offset_y, 255, 255, 255);
+          // else
+          //   canvas()->SetPixel(x, y, 0,0,0);
         }
       }
 	  
