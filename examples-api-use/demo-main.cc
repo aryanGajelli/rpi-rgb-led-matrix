@@ -1145,8 +1145,8 @@ public:
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(start-end);
       uint32_t duration_us = static_cast<uint32_t>(duration.count());
 
-      if (duration < us_per_slice) {
-        usleep(us_per_slice-duration);
+      if (duration_us < us_per_slice) {
+        usleep(us_per_slice-duration_us);
       }
     }
   }
