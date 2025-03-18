@@ -21,6 +21,7 @@
 #include <unistd.h>
 
 #include <algorithm>
+#include <chrono>
 
 using std::min;
 using std::max;
@@ -1051,7 +1052,7 @@ public:
     const int num_slices = 128;
     const float slice_to_rad = 2 * 3.14159265 / num_slices;
 
-    const uint32_t us_per_slice = 0.7*us_per_rev / num_slices; // Microseconds per slice
+    const uint32_t us_per_slice = us_per_rev / num_slices; // Microseconds per slice
 
     // Angles that align with a square's diagonals
     const float diag1 = 16; // 45 degrees
@@ -1065,8 +1066,9 @@ public:
       // Wait until panel has rotated to next slice
       //usleep(us_per_slice);
       
-      usleep(us_per_slice);
+      // usleep(us_per_slice);
       canvas()->Clear();
+      auto start = std::chrono::steady_clock::now();
 
       bool read_sync = static_cast<uint32_t>(*gpio_reg) & (1UL << (44-32));
       if (!prev_sync && read_sync) {
@@ -1138,6 +1140,14 @@ public:
 
       slice++;
       slice %= num_slices;
+
+      auto end = std::chrono::steady_clock::now();
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(start-end);
+      uint32_t duration_us = static_cast<uint32_t>(duration.count());
+
+      if (duration < us_per_slice) {
+        usleep(us_per_slice-duration);
+      }
     }
   }
 };
