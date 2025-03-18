@@ -1042,6 +1042,7 @@ public:
   void Run() override {
     const int canvas_width = canvas()->width();
     const int canvas_height = canvas()->height();
+    const int rows_per_panel = 64;
     const float rpm = 800;
     const float us_per_rev = 1e6 * 60 / rpm;
     
@@ -1062,13 +1063,18 @@ public:
 
     while (!interrupt_received) {
       // Wait until panel has rotated to next slice
-      usleep(us_per_slice);
+      usleep(us_per_slice/10);
       canvas()->Clear();
+      int ret = usleep(10*us_per_slice/9);
+      if (ret) {
+         printf("___USLEEP ERROR___ value: %d\n", ret);
+      }
+
 
       bool read_sync = static_cast<uint32_t>(*gpio_reg) & (1UL << (44-32));
       if (!prev_sync && read_sync) {
         slice = 0;
-        printf("--SYNC--");
+        //printf("--SYNC--");
       }
       prev_sync = read_sync;
       
@@ -1084,33 +1090,47 @@ public:
       else {
         width = abs(cube_dim / cosf(angle));
       }
+/*	
+      // Display red cube cross-section
+      height = 192;
+      int offset_x = (128 - width)/2;
+      int offset_y = 0;//(canvas_height - height)/2;
+      for(int x = 0; x < width/2; x++) {
+        for (int y = 0; y < height; y++) {
+          canvas()->SetPixel(x + offset_x, y + offset_y, 255, 0, 0);
+        }
+      }
+*/
 
-      // // Display red cube cross-section
-      // int offset_x = (canvas_width - width)/2;
-      // int offset_y = (canvas_height - height)/2;
-      // for(int x = 0; x < width; x++) {
-      //   for (int y = 0; y < height; y++) {
-      //     canvas()->SetPixel(x + offset_x, y + offset_y, 255, 0, 0);
-      //   }
-      // }
-      width = 64;
-      height = 64;
-      int offset_x = 64;
-      int offset_y = 0;
+//if(slice==0 || slice==num_slices/4 || slice==num_slices/2 || slice==num_slices*3/4){
+      int offset_x = 128-width/2;
+      int offset_y = (rows_per_panel - height) / 2;
+      for(int x = 0; x < width/2; x++) {
+        for (int y = 0; y < height; y++) {
+          canvas()->SetPixel(x + offset_x, y + offset_y, 255, 255, 255);
+        }
+      }
+
+      offset_x = 128-width/2;
+      offset_y = rows_per_panel * 2 + (rows_per_panel - height) / 2;
+      for (int x = 0; x < width/2; x++){
+	for (int y = 0; y < height; y++) {
+          canvas()->SetPixel(x + offset_x, y + offset_y, 255, 255, 255);
+	}
+      }
+	  
+//}
+	/*
+      width = 32;
+      height = 192;
+      int offset_x = 0;
+      int offset_y =  0;
       for(int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
           canvas()->SetPixel(x + offset_x, y + offset_y, 255, 0, 0);
         }
       }
-      width = 64;
-      height = 64;
-      offset_x = 0;
-      offset_y = 192;
-      for(int x = 0; x < width; x++) {
-        for (int y = 0; y < height; y++) {
-          canvas()->SetPixel(x + offset_x, y + offset_y, 255, 0, 0);
-        }
-      }
+*/
 
       slice++;
       slice %= num_slices;
