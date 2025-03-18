@@ -226,12 +226,12 @@ struct HardwareMapping matrix_hardware_mappings[] = {
     .addr_clk = GPIO_BIT(3),
     .addr_clr = GPIO_BIT(45), // TODO: we likely need to share this with another pin, figure out which one
 
-    .p0_r1 = GPIO_BIT(26),
-    .p0_g1 = GPIO_BIT(20),
-    .p0_b1 = GPIO_BIT(19),
-    .p0_r2 = GPIO_BIT(13),
-    .p0_g2 = GPIO_BIT(16),
-    .p0_b2 = GPIO_BIT(21),
+    .p3_r1 = GPIO_BIT(26),
+    .p3_g1 = GPIO_BIT(20),
+    .p3_b1 = GPIO_BIT(19),
+    .p3_r2 = GPIO_BIT(13),
+    .p3_g2 = GPIO_BIT(16),
+    .p3_b2 = GPIO_BIT(21),
   
     .p1_r1 = GPIO_BIT(6),
     .p1_g1 = GPIO_BIT(1),
@@ -263,12 +263,12 @@ struct HardwareMapping matrix_hardware_mappings[] = {
     .p2_g2 = GPIO_BIT(25),
     .p2_b2 = GPIO_BIT(8),
 
-    .p3_r1 = GPIO_BIT(17),
-    .p3_g1 = GPIO_BIT(27),
-    .p3_b1 = GPIO_BIT(23),
-    .p3_r2 = GPIO_BIT(14),
-    .p3_g2 = GPIO_BIT(15),
-    .p3_b2 = GPIO_BIT(22),
+    .p0_r1 = GPIO_BIT(17),
+    .p0_g1 = GPIO_BIT(27),
+    .p0_b1 = GPIO_BIT(23),
+    .p0_r2 = GPIO_BIT(14),
+    .p0_g2 = GPIO_BIT(15),
+    .p0_b2 = GPIO_BIT(22),
   },
 
 #ifdef ENABLE_WIDE_GPIO_COMPUTE_MODULE
