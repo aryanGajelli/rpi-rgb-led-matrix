@@ -1048,13 +1048,13 @@ public:
     
     const int cube_dim = 50;
     int slice = 0;
-    const int num_slices = 360;
+    const int num_slices = 128;
     const float slice_to_rad = 2 * 3.14159265 / num_slices;
 
-    const uint32_t us_per_slice = us_per_rev / num_slices; // Microseconds per slice
+    const uint32_t us_per_slice = 0.7*us_per_rev / num_slices; // Microseconds per slice
 
     // Angles that align with a square's diagonals
-    const float diag1 = 45; // 45 degrees
+    const float diag1 = 16; // 45 degrees
     const float diag2 = diag1 * 3;
     const float diag3 = diag1 * 5;
     const float diag4 = diag1 * 7;
@@ -1064,12 +1064,9 @@ public:
     while (!interrupt_received) {
       // Wait until panel has rotated to next slice
       //usleep(us_per_slice);
-      // canvas()->Clear();
-      int ret = usleep(us_per_slice);
-      if (ret) {
-         printf("___USLEEP ERROR___ value: %d\n", ret);
-      }
-
+      
+      usleep(us_per_slice);
+      canvas()->Clear();
 
       bool read_sync = static_cast<uint32_t>(*gpio_reg) & (1UL << (44-32));
       if (!prev_sync && read_sync) {
@@ -1078,9 +1075,9 @@ public:
       }
       prev_sync = read_sync;
       
-      int angle = slice * slice_to_rad;
+      double angle = slice * slice_to_rad;
       int height = cube_dim;
-      int width = 0;
+      double width = 0;
 
       // Calculate width of cube cross-section
       // Adjust formula when crossing the cubes's diagonals
@@ -1090,6 +1087,7 @@ public:
       else {
         width = abs(cube_dim / cosf(angle));
       }
+      //printf("%f\n", width);
 /*	
       // Display red cube cross-section
       height = 192;
