@@ -155,6 +155,97 @@ static struct RGBLedMatrix *led_matrix_create_from_options_optional_edit(
   return from_matrix(matrix);
 }
 
+struct RGBLedMatrix *led_matrix_create_from_ext(
+  struct RGBLedMatrixOptions *opts,
+  struct RGBLedRuntimeOptions * rt_opts, 
+  volatile uint32_t **gpio_reg) {
+    rgb_matrix::RuntimeOptions default_rt;
+  rgb_matrix::RGBMatrix::Options default_opts;
+
+  if (opts) {
+    // Copy between C struct and C++ struct. The C++ struct already has a
+    // default constructor that sets some values. These we override with the
+    // C-struct values if available.
+    // We assume everything non-zero has an explicit value.
+#define OPT_COPY_IF_SET(o) if (opts->o) default_opts.o = opts->o
+    OPT_COPY_IF_SET(hardware_mapping);
+    OPT_COPY_IF_SET(rows);
+    OPT_COPY_IF_SET(cols);
+    OPT_COPY_IF_SET(chain_length);
+    OPT_COPY_IF_SET(parallel);
+    OPT_COPY_IF_SET(pwm_bits);
+    OPT_COPY_IF_SET(pwm_lsb_nanoseconds);
+    OPT_COPY_IF_SET(pwm_dither_bits);
+    OPT_COPY_IF_SET(brightness);
+    OPT_COPY_IF_SET(scan_mode);
+    OPT_COPY_IF_SET(row_address_type);
+    OPT_COPY_IF_SET(multiplexing);
+    OPT_COPY_IF_SET(disable_hardware_pulsing);
+    OPT_COPY_IF_SET(show_refresh_rate);
+    OPT_COPY_IF_SET(inverse_colors);
+    OPT_COPY_IF_SET(led_rgb_sequence);
+    OPT_COPY_IF_SET(pixel_mapper_config);
+    OPT_COPY_IF_SET(panel_type);
+    OPT_COPY_IF_SET(limit_refresh_rate_hz);
+    OPT_COPY_IF_SET(disable_busy_waiting);
+#undef OPT_COPY_IF_SET
+  }
+
+  if (rt_opts) {
+    // Same story as RGBMatrix::Options
+#define RT_OPT_COPY_IF_SET(o) if (rt_opts->o) default_rt.o = rt_opts->o
+    RT_OPT_COPY_IF_SET(gpio_slowdown);
+    RT_OPT_COPY_IF_SET(daemon);
+    RT_OPT_COPY_IF_SET(drop_privileges);
+    RT_OPT_COPY_IF_SET(do_gpio_init);
+    RT_OPT_COPY_IF_SET(drop_priv_user);
+    RT_OPT_COPY_IF_SET(drop_priv_group);
+#undef RT_OPT_COPY_IF_SET
+  }
+
+  rgb_matrix::RGBMatrix::Options matrix_options = default_opts;
+  rgb_matrix::RuntimeOptions runtime_opt = default_rt;
+  
+
+  if (opts) {
+#define ACTUAL_VALUE_BACK_TO_OPT(o) opts->o = matrix_options.o
+    ACTUAL_VALUE_BACK_TO_OPT(hardware_mapping);
+    ACTUAL_VALUE_BACK_TO_OPT(rows);
+    ACTUAL_VALUE_BACK_TO_OPT(cols);
+    ACTUAL_VALUE_BACK_TO_OPT(chain_length);
+    ACTUAL_VALUE_BACK_TO_OPT(parallel);
+    ACTUAL_VALUE_BACK_TO_OPT(pwm_bits);
+    ACTUAL_VALUE_BACK_TO_OPT(pwm_lsb_nanoseconds);
+    ACTUAL_VALUE_BACK_TO_OPT(pwm_dither_bits);
+    ACTUAL_VALUE_BACK_TO_OPT(brightness);
+    ACTUAL_VALUE_BACK_TO_OPT(scan_mode);
+    ACTUAL_VALUE_BACK_TO_OPT(row_address_type);
+    ACTUAL_VALUE_BACK_TO_OPT(multiplexing);
+    ACTUAL_VALUE_BACK_TO_OPT(disable_hardware_pulsing);
+    ACTUAL_VALUE_BACK_TO_OPT(show_refresh_rate);
+    ACTUAL_VALUE_BACK_TO_OPT(inverse_colors);
+    ACTUAL_VALUE_BACK_TO_OPT(led_rgb_sequence);
+    ACTUAL_VALUE_BACK_TO_OPT(pixel_mapper_config);
+    ACTUAL_VALUE_BACK_TO_OPT(panel_type);
+    ACTUAL_VALUE_BACK_TO_OPT(limit_refresh_rate_hz);
+    ACTUAL_VALUE_BACK_TO_OPT(disable_busy_waiting);
+#undef ACTUAL_VALUE_BACK_TO_OPT
+  }
+
+  if (rt_opts) {
+#define ACTUAL_VALUE_BACK_TO_RT_OPT(o) rt_opts->o = runtime_opt.o
+    ACTUAL_VALUE_BACK_TO_RT_OPT(gpio_slowdown);
+    ACTUAL_VALUE_BACK_TO_RT_OPT(daemon);
+    ACTUAL_VALUE_BACK_TO_RT_OPT(drop_privileges);
+    ACTUAL_VALUE_BACK_TO_RT_OPT(do_gpio_init);
+    ACTUAL_VALUE_BACK_TO_RT_OPT(drop_priv_user);
+    ACTUAL_VALUE_BACK_TO_RT_OPT(drop_priv_group);
+#undef ACTUAL_VALUE_BACK_TO_RT_OPT
+  }
+
+  rgb_matrix::RGBMatrix *matrix =  rgb_matrix::RGBMatrix::CreateFromOptionsExt(matrix_options, runtime_opt, gpio_reg);
+  return from_matrix(matrix);
+}
 struct RGBLedMatrix *led_matrix_create_from_options(
   struct RGBLedMatrixOptions *opts, int *argc, char ***argv) {
   return led_matrix_create_from_options_optional_edit(opts, NULL, argc, argv,

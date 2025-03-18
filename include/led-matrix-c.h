@@ -249,6 +249,10 @@ struct RGBLedMatrix *led_matrix_create_from_options(
 struct RGBLedMatrix *led_matrix_create_from_options_const_argv(
              struct RGBLedMatrixOptions *options, int argc, char **argv);
 
+struct RGBLedMatrix *led_matrix_create_from_ext(
+             struct RGBLedMatrixOptions *options,
+             struct RGBLedRuntimeOptions * rt_options,
+             volatile uint32_t **gpio_reg);
 /**
  * The way to completely initialize your matrix without using command line
  * flags to initialize some things.
