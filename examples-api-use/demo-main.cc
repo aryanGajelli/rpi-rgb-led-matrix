@@ -1048,13 +1048,13 @@ public:
     
     const int cube_dim = 50;
     int slice = 0;
-    const int num_slices = 100;
+    const int num_slices = 360;
     const float slice_to_rad = 2 * 3.14159265 / num_slices;
 
     const uint32_t us_per_slice = us_per_rev / num_slices; // Microseconds per slice
 
     // Angles that align with a square's diagonals
-    const float diag1 = 0.7854; // 45 degrees
+    const float diag1 = 45; // 45 degrees
     const float diag2 = diag1 * 3;
     const float diag3 = diag1 * 5;
     const float diag4 = diag1 * 7;
@@ -1063,9 +1063,9 @@ public:
 
     while (!interrupt_received) {
       // Wait until panel has rotated to next slice
-      usleep(us_per_slice/10);
-      canvas()->Clear();
-      int ret = usleep(10*us_per_slice/9);
+      //usleep(us_per_slice);
+      // canvas()->Clear();
+      int ret = usleep(us_per_slice);
       if (ret) {
          printf("___USLEEP ERROR___ value: %d\n", ret);
       }
@@ -1084,7 +1084,7 @@ public:
 
       // Calculate width of cube cross-section
       // Adjust formula when crossing the cubes's diagonals
-      if ((diag1 < angle && angle < diag2) || (diag3 < angle && angle < diag4)) {
+      if ((diag1 < slice && slice < diag2) || (diag3 < slice && slice < diag4)) {
         width = abs(cube_dim / sinf(angle));
       }
       else {
@@ -1107,16 +1107,22 @@ public:
       int offset_y = (rows_per_panel - height) / 2;
       for(int x = 0; x < width/2; x++) {
         for (int y = 0; y < height; y++) {
-          canvas()->SetPixel(x + offset_x, y + offset_y, 255, 255, 255);
+          if (offset_x <= x && x < width/2 + offset_x && offset_y <= y && y < height + offset_y)
+            canvas()->SetPixel(x, y, 255, 255, 255);
+          else
+            canvas()->SetPixel(x, y, 0,0,0);
         }
       }
 
       offset_x = 128-width/2;
       offset_y = rows_per_panel * 2 + (rows_per_panel - height) / 2;
-      for (int x = 0; x < width/2; x++){
-	for (int y = 0; y < height; y++) {
-          canvas()->SetPixel(x + offset_x, y + offset_y, 255, 255, 255);
-	}
+      for(int x = 0; x < width/2; x++) {
+        for (int y = 0; y < height; y++) {
+          if (offset_x <= x && x < width/2 + offset_x && offset_y <= y && y < height + offset_y)
+            canvas()->SetPixel(x, y, 255, 255, 255);
+          else
+            canvas()->SetPixel(x, y, 0,0,0);
+        }
       }
 	  
 //}
