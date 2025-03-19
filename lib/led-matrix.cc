@@ -156,7 +156,7 @@ class RGBMatrix::Impl::UpdateThread : public Thread {
         unsigned frame_count = 0;
         unsigned low_bit_sequence = 0;
         uint32_t largest_time = 0;
-        gpio_bits_t last_gpio_bits = 0;
+        // gpio_bits_t last_gpio_bits = 0;
 
         // Let's start measure max time only after a we were running for a few
         // seconds to not pick up start-up glitches.
