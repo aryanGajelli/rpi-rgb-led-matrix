@@ -171,29 +171,29 @@ class RGBMatrix::Impl::UpdateThread : public Thread {
                 ->DumpToMatrix(io_, start_bit_[low_bit_sequence % 4]);
 
             // SwapOnVSync() exchange.
-            {
-                MutexLock l(&frame_sync_);
-                // Do fast equality test first (likely due to frame_count reset).
-                if (frame_count == requested_frame_multiple_ || frame_count % requested_frame_multiple_ == 0) {
-                    // We reset to avoid frame hick-up every couple of weeks
-                    // run-time iff requested_frame_multiple_ is not a factor of 2^32.
-                    frame_count = 0;
-                    if (next_frame_ != NULL) {
-                        current_frame_ = next_frame_;
-                        next_frame_ = NULL;
-                    }
-                    pthread_cond_signal(&frame_done_);
-                }
-            }
+            // {
+            //     MutexLock l(&frame_sync_);
+            //     // Do fast equality test first (likely due to frame_count reset).
+            //     if (frame_count == requested_frame_multiple_ || frame_count % requested_frame_multiple_ == 0) {
+            //         // We reset to avoid frame hick-up every couple of weeks
+            //         // run-time iff requested_frame_multiple_ is not a factor of 2^32.
+            //         frame_count = 0;
+            //         if (next_frame_ != NULL) {
+            //             current_frame_ = next_frame_;
+            //             next_frame_ = NULL;
+            //         }
+            //         pthread_cond_signal(&frame_done_);
+            //     }
+            // }
 
             // Read input bits.
-            const gpio_bits_t inputs = io_->Read();
-            if (inputs != last_gpio_bits) {
-                last_gpio_bits = inputs;
-                MutexLock l(&input_sync_);
-                gpio_inputs_ = inputs;
-                pthread_cond_signal(&input_change_);
-            }
+            // const gpio_bits_t inputs = io_->Read();
+            // if (inputs != last_gpio_bits) {
+            //     last_gpio_bits = inputs;
+            //     MutexLock l(&input_sync_);
+            //     gpio_inputs_ = inputs;
+            //     pthread_cond_signal(&input_change_);
+            // }
 
             ++frame_count;
             ++low_bit_sequence;
